@@ -1,11 +1,16 @@
 package it.devcando.saldoclick;
 
 import it.devcando.saldoclick.R;
+import it.devcando.saldoclick.model.Conto;
+import it.devcando.saldoclick.model.Movimento;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -28,7 +33,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -47,6 +52,8 @@ import android.widget.TextView;
  * well.
  */
 public class LoginActivity extends Activity {
+
+	public static final String PREFS_NAME = "SaldoClickPref";
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -73,7 +80,8 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.
-		mEmail = "stefano.candori";
+		mEmail = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).getString(
+				"username", "");
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
 
@@ -84,6 +92,9 @@ public class LoginActivity extends Activity {
 					public boolean onEditorAction(TextView textView, int id,
 							KeyEvent keyEvent) {
 						if (id == R.id.login || id == EditorInfo.IME_NULL) {
+							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(
+									mLoginFormView.getWindowToken(), 0);
 							attemptLogin();
 							return true;
 						}
@@ -139,12 +150,11 @@ public class LoginActivity extends Activity {
 		View focusView = null;
 
 		// Check for a valid password.
-		// TODO uncomment this
-		// if (TextUtils.isEmpty(mPassword)) {
-		// mPasswordView.setError(getString(R.string.error_field_required));
-		// focusView = mPasswordView;
-		// cancel = true;
-		// }
+		if (TextUtils.isEmpty(mPassword)) {
+			mPasswordView.setError(getString(R.string.error_field_required));
+			focusView = mPasswordView;
+			cancel = true;
+		}
 
 		// Check for a valid email address.
 		if (TextUtils.isEmpty(mEmail)) {
@@ -161,6 +171,12 @@ public class LoginActivity extends Activity {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+
+			// Save username for future uses
+			Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+					.edit();
+			editor.putString("username", mEmail);
+			editor.commit();
 
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
@@ -211,12 +227,24 @@ public class LoginActivity extends Activity {
 									: View.VISIBLE);
 						}
 					});
+
+			mForgotPasswordView.setVisibility(View.VISIBLE);
+			mForgotPasswordView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 0 : 1)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mForgotPasswordView.setVisibility(show ? View.GONE
+									: View.VISIBLE);
+						}
+					});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
 			mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 			mImageView.setVisibility(show ? View.GONE : View.VISIBLE);
+			mForgotPasswordView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
 
@@ -224,17 +252,16 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, String> {
+	public class UserLoginTask extends AsyncTask<Void, Void, Conto> {
 		private Boolean flagError;
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected Conto doInBackground(Void... params) {
 			flagError = false;
-			return "100 €;10.5 €;12345678;Stefano Candori;1500.50;345.48";
-			// return executeRequest();
+			return executeRequest();
 		}
 
-		private String executeRequest() {
+		private Conto executeRequest() {
 			String contabile = "";
 			String disponibile = "";
 			String numeroConto = "";
@@ -249,7 +276,6 @@ public class LoginActivity extends Activity {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
 						2);
 				nameValuePairs.add(new BasicNameValuePair("USER", mEmail));
-				mPassword = "";
 				nameValuePairs
 						.add(new BasicNameValuePair("PASSWORD", mPassword));
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -274,60 +300,98 @@ public class LoginActivity extends Activity {
 
 				String result = "";
 
-				result = findInfo(node,
+				// SALDO CONTABILE
+				result = findSingleInfo(node,
 						"//*[@id=\"Listamovimenti_Lista_lblSaldoContabile\"]");
 				if (result.length() > 0) {
 					contabile = result;
 				} else {
 					flagError = true;
-					return "Error!Saldo Contabile not found";
+					return null;
 				}
 
-				result = findInfo(node,
+				// SALDO DISPONIBILE
+				result = findSingleInfo(node,
 						"//*[@id=\"Listamovimenti_Lista_lblSaldoDisponibile\"]");
 				if (result.length() > 0) {
 					disponibile = result;
 				} else {
 					flagError = true;
-					return "Error!Saldo Disponibile not found";
+					return null;
 				}
 
-				result = findInfo(node,
+				// NUMERO CONTO
+				result = findSingleInfo(node,
 						"//*[@id=\"Listamovimenti_Lista_lblNumeroConto\"]");
 				if (result.length() > 0) {
 					numeroConto = result;
 				} else {
 					flagError = true;
-					return "Error!Numero conto not found";
+					return null;
 				}
 
-				result = findInfo(node,
+				// INTESTATARIO
+				result = findSingleInfo(node,
 						"//*[@id=\"Listamovimenti_Lista_lblIntestatari\"]");
 				if (result.length() > 0) {
 					intestatario = result;
 				} else {
 					flagError = true;
-					return "Error!Numero conto not found";
+					return null;
+				}
+
+				/* MOVIMENTI PARSING */
+				ArrayList<Movimento> movimenti = new ArrayList<Movimento>();
+				Movimento m;
+				ArrayList<String[]> resultArrayList;
+				resultArrayList = findRowsInfo(node,
+						"//*[@id=\"Listamovimenti_Lista_dgListaMovimenti\"]/tbody/tr");
+				if (resultArrayList != null && resultArrayList.size() > 0) {
+					for (Iterator<String[]> i = resultArrayList.iterator(); i
+							.hasNext();) {
+						String[] tmp = i.next();
+						try {
+							DecimalFormat df = new DecimalFormat();
+							DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+							symbols.setDecimalSeparator(',');
+							symbols.setGroupingSeparator('.');
+							df.setDecimalFormatSymbols(symbols);
+							df.parse(tmp[1]).doubleValue();
+							m = new Movimento(df.parse(tmp[1]).doubleValue(),
+									tmp[0], tmp[2]);
+						} catch (Exception e) {
+							e.printStackTrace();
+							flagError = true;
+							return null;
+						}
+						// if everything went fine...let's add the movimento to
+						// the list.
+						movimenti.add(m);
+					}
+
+				} else {
+					flagError = true;
+					return null;
 				}
 
 				// Close connection
 				is.close();
 
-				return contabile + ";" + disponibile + ";" + numeroConto + ";"
-						+ intestatario;
+				return new Conto(intestatario, numeroConto, disponibile,
+						contabile, movimenti);
 
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 				flagError = true;
-				return "Unable to execute the operation.";
+				return null;
 			} catch (IOException e) {
 				e.printStackTrace();
 				flagError = true;
-				return "Unable to execute the operation.";
+				return null;
 			}
 		}
 
-		private String findInfo(TagNode node, String xpath) {
+		private String findSingleInfo(TagNode node, String xpath) {
 			Object[] objects;
 			try {
 				objects = node.evaluateXPath(xpath);
@@ -342,20 +406,52 @@ public class LoginActivity extends Activity {
 			}
 		}
 
+		// Returns an ArrayList containing string array containing date, causal
+		// and quantity of movimento.
+		private ArrayList<String[]> findRowsInfo(TagNode node, String xpath) {
+			Object[] objects;
+			try {
+				objects = node.evaluateXPath(xpath);
+			} catch (XPatherException e) {
+				e.printStackTrace();
+				return null;
+			}
+			ArrayList<String[]> finalResult = new ArrayList<String[]>();
+			if (objects.length > 0) {
+				String[] result = new String[3];
+				for (int i = 1; i < objects.length; i++) {
+					try {
+						result[0] = ((TagNode) ((TagNode) objects[i])
+								.evaluateXPath("//td[1]/span")[0]).getText()
+								.toString();
+						result[1] = ((TagNode) ((TagNode) objects[i])
+								.evaluateXPath("//td[4]/span")[0]).getText()
+								.toString();
+						result[2] = ((TagNode) ((TagNode) objects[i])
+								.evaluateXPath("//td[5]/span")[0]).getText()
+								.toString();
+					} catch (Exception e) {
+						e.printStackTrace();
+						return null;
+					}
+
+					finalResult.add(result);
+				}
+				return finalResult;
+			} else {
+				return null;
+			}
+		}
+
 		@Override
-		protected void onPostExecute(final String result) {
+		protected void onPostExecute(final Conto result) {
 			mAuthTask = null;
 			showProgress(false);
 			if (!flagError) {
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
 				Bundle b = new Bundle();
-				b.putCharSequence("contabile", result.split(";")[0]);
-				b.putCharSequence("disponibile", result.split(";")[1]);
-				b.putCharSequence("numeroConto", result.split(";")[2]);
-				b.putCharSequence("intestatario", result.split(";")[3]);
-				b.putDouble("entrate", Double.parseDouble(result.split(";")[4]));
-				b.putDouble("uscite", Double.parseDouble(result.split(";")[5]));
+				b.putParcelable("conto", result);
 				intent.putExtras(b);
 				startActivity(intent);
 

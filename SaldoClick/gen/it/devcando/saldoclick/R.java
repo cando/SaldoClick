@@ -101,7 +101,7 @@ public final class R {
     public static final class string {
         public static final int action_about=0x7f080001;
         public static final int action_forgot_password=0x7f08000c;
-        public static final int action_sign_in_register=0x7f08000a;
+        public static final int action_sign_in_long=0x7f08000a;
         public static final int action_sign_in_short=0x7f08000b;
         public static final int app_name=0x7f080000;
         public static final int arrow_description=0x7f08001d;
