@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
+    <string name="prompt_email">Nome utente</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in_long"><b>Effettua l\'accesso</b></string>
     <string name="action_sign_in_short">Accedi</string>
