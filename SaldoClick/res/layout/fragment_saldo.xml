@@ -1,0 +1,271 @@
+<it.devcando.saldoclick.NowAnimationLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <!-- General Info layout -->
+
+    <LinearLayout
+        android:id="@+id/info_general_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/space_between_cards"
+        android:background="@drawable/bg_card"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/intestatario_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/saldo_section_padding_left" >
+
+            <TextView
+                android:id="@+id/intestatario_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingBottom="@dimen/saldo_label_value_distance"
+                android:text="@string/empty"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/intestatario_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingBottom="@dimen/saldo_from_separator_padding_top"
+                android:text="@string/intestatario"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/gray" />
+        </LinearLayout>
+
+        <!-- Separator -->
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:id="@+id/numero_conto_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/saldo_section_padding_left"
+            android:paddingTop="@dimen/saldo_from_separator_padding_top" >
+
+            <TextView
+                android:id="@+id/numero_conto_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingBottom="@dimen/saldo_label_value_distance"
+                android:text="@string/empty"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/numero_conto_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/numero_conto"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/gray" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Saldo disponibile and contabile layout -->
+
+    <LinearLayout
+        android:id="@+id/saldo_general_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_general_layout"
+        android:layout_marginBottom="@dimen/space_between_cards"
+        android:background="@drawable/bg_card"
+        android:orientation="vertical" >
+
+        <!-- <TextView -->
+        <!-- android:id="@+id/saldo_general_label" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:gravity="left" -->
+        <!-- android:paddingBottom="5dp" -->
+        <!-- android:paddingLeft="@dimen/saldo_section_padding_left" -->
+        <!-- android:text="@string/saldo_general" -->
+        <!-- android:textAllCaps="true" -->
+        <!-- android:textAppearance="?android:attr/textAppearanceSmall" -->
+        <!-- android:textStyle="bold" /> -->
+
+
+        <!-- Separator -->
+
+
+        <!-- <View -->
+        <!-- android:layout_width="fill_parent" -->
+        <!-- android:layout_height="2dp" -->
+        <!-- android:background="@android:color/darker_gray" /> -->
+
+        <LinearLayout
+            android:id="@+id/saldo_disponibile_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/saldo_section_padding_left" >
+
+            <TextView
+                android:id="@+id/saldo_disponibile_value"
+                style="@style/TextSaldo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/saldo_label_value_distance"
+                android:text="@string/empty"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/saldo_disponibile_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/saldo_from_separator_padding_top"
+                android:text="@string/saldo_disponibile"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/gray"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Separator -->
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:id="@+id/saldo_contabile_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/saldo_section_padding_left"
+            android:paddingTop="@dimen/saldo_from_separator_padding_top" >
+
+            <TextView
+                android:id="@+id/saldo_contabile_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/empty"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/saldo_contabile_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/saldo_contabile"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/gray" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Chart -->
+
+    <LinearLayout
+        android:id="@+id/chart_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/saldo_general_layout"
+        android:layout_marginBottom="@dimen/space_between_cards"
+        android:background="@drawable/bg_card"
+        android:orientation="vertical"
+        android:paddingTop="10dp" >
+
+        <TextView
+            android:id="@+id/chart_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingBottom="5dp"
+            android:paddingLeft="@dimen/saldo_section_padding_left"
+            android:text="@string/chart_label"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <!-- Separator -->
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:id="@+id/chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/bar_entrate_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|left"
+                android:layout_marginTop="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/bar_uscite_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|left"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
+        
+        
+    </LinearLayout>
+    
+    <!-- Movimenti -->
+    <LinearLayout
+        android:id="@+id/movimenti_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chart_layout"
+        android:layout_marginBottom="@dimen/space_between_cards"
+        android:background="@drawable/bg_card"
+        android:orientation="vertical"
+        android:paddingTop="10dp" >
+
+        <TextView
+        android:id="@+id/movimenti_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingBottom="5dp"
+        android:paddingLeft="@dimen/saldo_section_padding_left"
+        android:text="Movimenti in arrivo..."
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/movimenti_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/chart_layout"
+        android:layout_marginBottom="@dimen/space_between_cards"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0.5dp"
+        android:background="@drawable/bg_card"/>
+
+</it.devcando.saldoclick.NowAnimationLayout>

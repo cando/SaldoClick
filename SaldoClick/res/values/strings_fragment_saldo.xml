@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings related to fragment saldo -->
+    <string name="intestatario">Intestatario</string>
+    <string name="numero_conto">Conto n°</string>
+    <string name="saldo_contabile">Saldo contabile</string>
+    <string name="saldo_disponibile">Saldo disponibile</string>
+    <string name="saldo_general">Saldo</string>
+    <string name="info_general">Info</string>
+    <string name="empty">#####.##</string>
+    
+    <string name="hello_world">Hello World!</string>
+</resources>
