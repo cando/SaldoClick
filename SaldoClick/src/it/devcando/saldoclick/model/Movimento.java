@@ -1,6 +1,9 @@
 package it.devcando.saldoclick.model;
 
-public class Movimento {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Movimento implements Parcelable{
 
 	private double quantity;
 	private String date;
@@ -12,6 +15,12 @@ public class Movimento {
 		this.causal = causal;
 	}
 	
+	public Movimento(Parcel source) {
+		this.quantity = source.readDouble();
+		this.date = source.readString();
+		this.causal = source.readString();
+	}
+
 	public double getQuantity() {
 		return quantity;
 	}
@@ -30,6 +39,36 @@ public class Movimento {
 	public void setCausal(String causal) {
 		this.causal = causal;
 	}
+
+	/* PARCELABLE STUFFS*/
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeDouble(quantity);
+		dest.writeString(date);
+		dest.writeString(causal);
+	}
+	
+	public static final Parcelable.Creator<Movimento> CREATOR= new Parcelable.Creator<Movimento>() {
+
+		@Override
+		public Movimento createFromParcel(Parcel source) {
+		// TODO Auto-generated method stub
+		return new Movimento(source);  //using parcelable constructor
+		}
+
+		@Override
+		public Movimento[] newArray(int size) {
+		// TODO Auto-generated method stub
+		return new Movimento[size];
+		}
+	};
 	
 	
 }
