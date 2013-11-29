@@ -38,10 +38,12 @@ public final class R {
         public static final int bg_card=0x7f020000;
         public static final int bg_card_no_shadow=0x7f020001;
         public static final int btn_blue=0x7f020002;
-        public static final int gradient_bg=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int progress_drawable_blue=0x7f020005;
-        public static final int title=0x7f020006;
+        public static final int expander_close_holo_light=0x7f020003;
+        public static final int expander_open_holo_light=0x7f020004;
+        public static final int gradient_bg=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int progress_drawable_blue=0x7f020007;
+        public static final int title=0x7f020008;
     }
     public static final class id {
         public static final int bar_entrate_layout=0x7f0b001c;
@@ -61,12 +63,12 @@ public final class R {
         public static final int login_status=0x7f0b0000;
         public static final int login_status_message=0x7f0b0001;
         public static final int main_scroll_view=0x7f0b0009;
+        public static final int movimenti_arrow=0x7f0b0020;
         public static final int movimenti_label=0x7f0b001f;
         public static final int movimenti_layout=0x7f0b001e;
-        public static final int movimenti_list=0x7f0b0020;
+        public static final int movimenti_separator=0x7f0b0021;
         public static final int movimento_causal=0x7f0b0023;
         public static final int movimento_date=0x7f0b0022;
-        public static final int movimento_header=0x7f0b0021;
         public static final int movimento_quantity=0x7f0b0024;
         public static final int numero_conto_label=0x7f0b0011;
         public static final int numero_conto_layout=0x7f0b000f;
@@ -80,6 +82,7 @@ public final class R {
         public static final int saldo_disponibile_value=0x7f0b0014;
         public static final int saldo_fragment=0x7f0b000a;
         public static final int saldo_general_layout=0x7f0b0012;
+        public static final int separator_light=0x7f0b0025;
         public static final int sign_in_button=0x7f0b0007;
     }
     public static final class integer {
@@ -89,8 +92,8 @@ public final class R {
         public static final int activity_login=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int fragment_saldo=0x7f030002;
-        public static final int movimenti_header=0x7f030003;
-        public static final int movimenti_row=0x7f030004;
+        public static final int movimenti_row=0x7f030003;
+        public static final int separator_light=0x7f030004;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -101,6 +104,7 @@ public final class R {
         public static final int action_sign_in_register=0x7f08000a;
         public static final int action_sign_in_short=0x7f08000b;
         public static final int app_name=0x7f080000;
+        public static final int arrow_description=0x7f08001d;
         public static final int chart_label=0x7f080005;
         public static final int conto_title=0x7f080004;
         public static final int empty=0x7f08001a;
@@ -117,6 +121,7 @@ public final class R {
         public static final int intestatario=0x7f080014;
         public static final int login_image_description=0x7f080012;
         public static final int login_progress_signing_in=0x7f08000d;
+        public static final int movimenti_label=0x7f08001c;
         public static final int numero_conto=0x7f080015;
         /**  Strings related to login 
          */

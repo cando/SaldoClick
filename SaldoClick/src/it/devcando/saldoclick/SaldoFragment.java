@@ -3,23 +3,22 @@ package it.devcando.saldoclick;
 import it.devcando.saldoclick.model.Movimento;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,10 +34,16 @@ public class SaldoFragment extends Fragment {
 	private LinearLayout chart;
 	private RelativeLayout bar_entrate_layout;
 	private RelativeLayout bar_uscite_layout;
-	private ExpandableListView movimenti_list;
+	private LinearLayout movimenti_list_layout;
+	private TextView movimenti_header;
+	private ImageView movimenti_arrow;
+	private Drawable arrow_down;
+	private Drawable arrow_up;
 	
 	private double entrate;
 	private double uscite;
+	
+	private boolean isMovimentiVisible = false;
 
 	public SaldoFragment() {
 	}
@@ -59,40 +64,89 @@ public class SaldoFragment extends Fragment {
 				.findViewById(R.id.intestatario_value);
 		chart = (LinearLayout) rootView.findViewById(R.id.chart_layout);
 		bar_entrate_layout = (RelativeLayout) rootView.findViewById(R.id.bar_entrate_layout);
-		bar_uscite_layout = (RelativeLayout) rootView.findViewById(R.id.bar_uscite_layout);
-		 
+		bar_uscite_layout = (RelativeLayout) rootView.findViewById(R.id.bar_uscite_layout);	 
 
 		//Movimenti STUFFS	
 		ArrayList<String> groupList = new ArrayList<String>();
         groupList.add("Movimenti");
         
         LinkedHashMap<String, List<Movimento>> movimentiCollection = new LinkedHashMap<String, List<Movimento>>();
-        ArrayList<Movimento> movimentiList = new ArrayList<Movimento>();
+        final ArrayList<Movimento> movimentiList = new ArrayList<Movimento>();
 		Movimento mov1 = new Movimento(10000, "12-12-13","Fatti miei");
 		Movimento mov2 = new Movimento(-12000, "09-11-13","Fatti tuoi e di chiunque altro non ti deve importare, hai capito?");
         movimentiList.add(mov1);
         movimentiList.add(mov2);
 		movimentiCollection.put("Movimenti", movimentiList);
 		
-		movimenti_list = (ExpandableListView)rootView.findViewById(R.id.movimenti_list);
-        MovimentiExpandableAdapter adapter = new MovimentiExpandableAdapter(
-                getActivity(), groupList, movimentiCollection);
-        movimenti_list.setAdapter(adapter);
+		arrow_up = getActivity().getResources().getDrawable(R.drawable.expander_close_holo_light);
+		arrow_down = getActivity().getResources().getDrawable(R.drawable.expander_open_holo_light);
+		movimenti_list_layout = (LinearLayout) rootView.findViewById(R.id.movimenti_layout);
+		movimenti_arrow = (ImageView)rootView.findViewById(R.id.movimenti_arrow);
+		movimenti_header = (TextView) rootView.findViewById(R.id.movimenti_label);
+		movimenti_header.setOnClickListener(new OnClickListener() {
+	        @Override
+			public void onClick(View v) {
+				if (isMovimentiVisible == false) {
+					if (movimenti_list_layout.getChildCount() == 2) {
+						// Means we haven't still added any movimento
+						// first child is textview, second is separator
+						// So let's add the movimentos
+						getActivity().findViewById(R.id.movimenti_separator)
+								.setVisibility(View.VISIBLE);
+
+						for (Iterator<Movimento> i = movimentiList.iterator(); i.hasNext();) {
+							Movimento movimento = i.next();
+							LayoutInflater inflater = getActivity()
+									.getLayoutInflater();
+
+							View convertView = inflater.inflate(
+									R.layout.movimenti_row, null);
+
+							TextView date = (TextView) convertView
+									.findViewById(R.id.movimento_date);
+							TextView quantity = (TextView) convertView
+									.findViewById(R.id.movimento_quantity);
+							TextView causal = (TextView) convertView
+									.findViewById(R.id.movimento_causal);
+
+							date.setText(movimento.getDate());
+							quantity.setText(String.valueOf(movimento
+									.getQuantity()) + " €");
+							causal.setText(movimento.getCausal());
+
+							movimenti_list_layout.addView(convertView);
+							//hide separator if it's the last movimento
+							if (!i.hasNext())
+							{
+								convertView.findViewById(R.id.separator_light).setVisibility(View.GONE);
+							}
+						}
+					}
+					else
+					{
+						//We already have added the movimentos...just show them
+						for (int i = 1; i < movimenti_list_layout.getChildCount(); i++){
+							//Start from 2 because 0 is the textview
+							movimenti_list_layout.getChildAt(i).setVisibility(View.VISIBLE);
+						}
+					}
+					
+					movimenti_arrow.setImageDrawable(arrow_up);
+					isMovimentiVisible = true;
+				}
+				else
+				{
+					for (int i = 1; i < movimenti_list_layout.getChildCount(); i++){
+						//Start from 2 because 0 is the textview
+						movimenti_list_layout.getChildAt(i).setVisibility(View.GONE);
+					}
+					
+					movimenti_arrow.setImageDrawable(arrow_down);
+					isMovimentiVisible = false;
+				}
+			}
+	    });
         
-        //FIXME move to right the indicators
-        movimenti_list.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener () {
-		    @SuppressWarnings("deprecation")
-			@Override
-		     public void onGlobalLayout() {
-				setGroupIndicatorToRight();
-				setListViewHeightBasedOnChildren(movimenti_list);
-				if (Build.VERSION.SDK_INT < 16) {
-			        chart.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-			    } else {
-			        chart.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-			    }
-		    }
-		  });
 		
 		chart.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener () {
 		    @SuppressWarnings("deprecation")
@@ -174,46 +228,5 @@ public class SaldoFragment extends Fragment {
 		//Let's use as maximum value the sum of income and outcome! I think it's ok anyway! :) :)
 		return max * x / max_norm;
 	}
- 
-    @SuppressLint("NewApi")
-	private void setGroupIndicatorToRight() {
-		if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-			movimenti_list.setIndicatorBounds(movimenti_list.getRight()
-					- getDipsFromPixel(80), movimenti_list.getWidth() - getDipsFromPixel(5));
-		} else {
-			movimenti_list.setIndicatorBoundsRelative(movimenti_list.getRight()
-					- getDipsFromPixel(80), movimenti_list.getWidth() - getDipsFromPixel(5));
-		}
-    }
- 
-    // Convert pixel to dip
-    public int getDipsFromPixel(float pixels) {
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        return (int) (pixels * scale + 0.5f);
-    }
-    
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-        int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(), MeasureSpec.AT_MOST);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0) {
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LayoutParams.WRAP_CONTENT));
-            }
-            view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
  
 }

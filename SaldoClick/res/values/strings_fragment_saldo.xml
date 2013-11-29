@@ -10,4 +10,6 @@
     <string name="empty">#####.##</string>
     
     <string name="hello_world">Hello World!</string>
+    <string name="movimenti_label">Movimenti</string>
+    <string name="arrow_description"></string>
 </resources>
