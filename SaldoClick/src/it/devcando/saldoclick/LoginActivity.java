@@ -350,15 +350,15 @@ public class LoginActivity extends Activity {
 					for (Iterator<String[]> i = resultArrayList.iterator(); i
 							.hasNext();) {
 						String[] tmp = i.next();
+						String quantity_s = tmp[2].equalsIgnoreCase("")? "-" + tmp[1]: tmp[2];
 						try {
 							DecimalFormat df = new DecimalFormat();
 							DecimalFormatSymbols symbols = new DecimalFormatSymbols();
 							symbols.setDecimalSeparator(',');
 							symbols.setGroupingSeparator('.');
 							df.setDecimalFormatSymbols(symbols);
-							df.parse(tmp[1]).doubleValue();
-							m = new Movimento(df.parse(tmp[1]).doubleValue(),
-									tmp[0], tmp[2]);
+							double quantity = df.parse(quantity_s).doubleValue();
+							m = new Movimento(quantity,tmp[0], tmp[3]);
 						} catch (Exception e) {
 							e.printStackTrace();
 							flagError = true;
@@ -418,16 +418,19 @@ public class LoginActivity extends Activity {
 			}
 			ArrayList<String[]> finalResult = new ArrayList<String[]>();
 			if (objects.length > 0) {
-				String[] result = new String[3];
 				for (int i = 1; i < objects.length; i++) {
+					String[] result = new String[4];
 					try {
 						result[0] = ((TagNode) ((TagNode) objects[i])
 								.evaluateXPath("//td[1]/span")[0]).getText()
 								.toString();
 						result[1] = ((TagNode) ((TagNode) objects[i])
-								.evaluateXPath("//td[4]/span")[0]).getText()
+								.evaluateXPath("//td[3]/span")[0]).getText()
 								.toString();
 						result[2] = ((TagNode) ((TagNode) objects[i])
+								.evaluateXPath("//td[4]/span")[0]).getText()
+								.toString();
+						result[3] = ((TagNode) ((TagNode) objects[i])
 								.evaluateXPath("//td[5]/span")[0]).getText()
 								.toString();
 					} catch (Exception e) {

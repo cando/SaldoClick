@@ -90,7 +90,7 @@ public class Conto implements Parcelable {
 			if(movimento.getQuantity() > 0)
 				entrate += movimento.getQuantity();
 			else
-				uscite += movimento.getQuantity();
+				uscite -= movimento.getQuantity();
 		}
 	}
 

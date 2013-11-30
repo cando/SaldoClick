@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="C:/Users/candoris/git/SaldoClick/SaldoClick/libs/htmlcleaner-2.6.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/candoris/Downloads/Utils/adt-bundle-windows-x86_64-20130917/sdk/extras/android/support/v13/android-support-v13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/stefano/git/SaldoClick/SaldoClick/libs/htmlcleaner-2.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/stefano/Downloads/Utils/adt-bundle-windows-x86_64-20131030/sdk/extras/android/support/v13/android-support-v13.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
