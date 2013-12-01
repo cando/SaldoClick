@@ -261,8 +261,7 @@
                 android:layout_alignTop="@id/movimenti_label"
                 android:layout_alignParentRight="true"
                 android:contentDescription="@string/arrow_description"
-                android:src="@drawable/expander_open_holo_light" 
-                android:scaleType="fitCenter"/>
+                android:src="@drawable/expander_open_holo_light" />
         </RelativeLayout>
 
         <!-- Separator -->
