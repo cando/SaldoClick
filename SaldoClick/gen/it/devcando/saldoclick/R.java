@@ -22,6 +22,7 @@ public final class R {
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
+ Default screen margins, per the Android Design guidelines. 
 
          Customize dimensions originally defined in res/values/dimens.xml (such as
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
@@ -29,6 +30,7 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f060000;
         public static final int activity_vertical_margin=0x7f060001;
+        public static final int chart_height=0x7f060006;
         public static final int saldo_from_separator_padding_top=0x7f060003;
         public static final int saldo_label_value_distance=0x7f060004;
         public static final int saldo_section_padding_left=0x7f060002;

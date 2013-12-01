@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 public class SaldoFragment extends Fragment {
 
-	private final int BAR_WIDTH = 100;
 	private final int BAR_PADDING = 10;
 
 	private TextView textViewContabile;
@@ -173,9 +172,7 @@ public class SaldoFragment extends Fragment {
 	}
 
 	public void drawChart(double entrate, double uscite) {
-		DisplayMetrics metrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int bar_width = getDPI(BAR_WIDTH, metrics);
+		int bar_width = (int) getResources().getDimension(R.dimen.chart_height);
 		// Entrate
 		View bar = new View(getActivity());
 		bar.setBackgroundColor(getResources().getColor(R.color.green));
