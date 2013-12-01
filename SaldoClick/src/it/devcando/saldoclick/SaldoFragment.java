@@ -5,10 +5,13 @@ import it.devcando.saldoclick.model.Movimento;
 
 import java.util.Iterator;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -151,6 +154,7 @@ public class SaldoFragment extends Fragment {
 
 		chart.getViewTreeObserver().addOnGlobalLayoutListener(
 				new OnGlobalLayoutListener() {
+					@SuppressLint("NewApi")
 					@SuppressWarnings("deprecation")
 					@Override
 					public void onGlobalLayout() {
@@ -169,13 +173,16 @@ public class SaldoFragment extends Fragment {
 	}
 
 	public void drawChart(double entrate, double uscite) {
+		DisplayMetrics metrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		int bar_width = getDPI(BAR_WIDTH, metrics);
 		// Entrate
 		View bar = new View(getActivity());
 		bar.setBackgroundColor(getResources().getColor(R.color.green));
 		int bar_height = (int) normalize(entrate, chart.getWidth(), entrate
 				+ uscite);
 		bar.setLayoutParams(new RelativeLayout.LayoutParams(
-				bar_height == 0 ? BAR_PADDING / 2 : bar_height, BAR_WIDTH));
+				bar_height == 0 ? BAR_PADDING / 2 : bar_height, bar_width));
 		RelativeLayout.LayoutParams layoutParamsBar = (RelativeLayout.LayoutParams) bar
 				.getLayoutParams();
 		layoutParamsBar.addRule(RelativeLayout.CENTER_VERTICAL);
@@ -201,7 +208,7 @@ public class SaldoFragment extends Fragment {
 		bar_u.setBackgroundColor(getResources().getColor(R.color.red));
 		bar_height = (int) normalize(uscite, chart.getWidth(), entrate + uscite);
 		bar_u.setLayoutParams(new RelativeLayout.LayoutParams(
-				bar_height == 0 ? BAR_PADDING / 2 : bar_height, BAR_WIDTH));
+				bar_height == 0 ? BAR_PADDING / 2 : bar_height, bar_width));
 
 		TextView label_u = new TextView(getActivity());
 		label_u.setText(getResources().getString(R.string.uscite_label) + " "
@@ -218,6 +225,10 @@ public class SaldoFragment extends Fragment {
 		bar_uscite_layout.addView(bar_u);
 		bar_uscite_layout.addView(label_u);
 	}
+	
+	private static int getDPI(int size, DisplayMetrics metrics){
+	     return (size * metrics.densityDpi) / DisplayMetrics.DENSITY_DEFAULT;        
+	 }
 
 	/**
 	 * http://stackoverflow.com/questions/1549717/scale-numbers-to-be-255

@@ -369,11 +369,8 @@ public class LoginActivity extends Activity {
 						movimenti.add(m);
 					}
 
-				} else {
-					flagError = true;
-					return null;
 				}
-
+				//else movimenti is already empty! So ok..go on!
 				// Close connection
 				is.close();
 
