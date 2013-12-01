@@ -262,7 +262,7 @@
                 android:layout_alignParentRight="true"
                 android:contentDescription="@string/arrow_description"
                 android:src="@drawable/expander_open_holo_light" 
-                android:scaleType="fitXY"/>
+                android:scaleType="fitCenter"/>
         </RelativeLayout>
 
         <!-- Separator -->
